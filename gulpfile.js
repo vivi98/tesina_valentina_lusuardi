@@ -19,11 +19,11 @@ var banner = ['/*!\n',
 
 // Minify compiled CSS
 gulp.task('minify-css', function() {
-    return gulp.src(['sass/*.scss'])
+    return gulp.src(['src/style/*.scss'])
         .pipe(sass())
         .pipe(cleanCSS({ compatibility: 'ie8' }))
         .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest('css'))
+        .pipe(gulp.dest('dist/css'))
         .pipe(browserSync.reload({
             stream: true
         }))
@@ -31,33 +31,46 @@ gulp.task('minify-css', function() {
 
 // Minify JS
 gulp.task('minify-js', function() {
-    return gulp.src('js/grayscale.js')
+    return gulp.src('src/js/*.js')
         .pipe(uglify())
         .pipe(header(banner, { pkg: pkg }))
         .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest('js'))
+        .pipe(gulp.dest('dist/js'))
         .pipe(browserSync.reload({
             stream: true
         }))
 });
 
 // Copy vendor libraries from /node_modules into /vendor
-gulp.task('copy', function() {
-    gulp.src(['node_modules/bootstrap/dist/**/*', '!**/npm.js', '!**/bootstrap-theme.*', '!**/*.map'])
-        .pipe(gulp.dest('vendor/bootstrap'))
+//gulp.task('copy', function() {
+//    gulp.src(['node_modules/bootstrap/dist/**/*', '!**/npm.js', '!**/bootstrap-theme.*', '!**/*.map'])
+ //       .pipe(gulp.dest('vendor/bootstrap'))
+//
+//    gulp.src(['node_modules/jquery/dist/jquery.js', 'node_modules/jquery/dist/jquery.min.js'])
+//        .pipe(gulp.dest('vendor/jquery'))
+//
+//    gulp.src([
+//            'node_modules/font-awesome/**',
+//            '!node_modules/font-awesome/**/*.map',
+//           '!node_modules/font-awesome/.npmignore',
+//            '!node_modules/font-awesome/*.txt',
+//            '!node_modules/font-awesome/*.md',
+//            '!node_modules/font-awesome/*.json'
+//        ])
+//        .pipe(gulp.dest('vendor/font-awesome'))
+//})
 
-    gulp.src(['node_modules/jquery/dist/jquery.js', 'node_modules/jquery/dist/jquery.min.js'])
-        .pipe(gulp.dest('vendor/jquery'))
 
-    gulp.src([
-            'node_modules/font-awesome/**',
-            '!node_modules/font-awesome/**/*.map',
-            '!node_modules/font-awesome/.npmignore',
-            '!node_modules/font-awesome/*.txt',
-            '!node_modules/font-awesome/*.md',
-            '!node_modules/font-awesome/*.json'
-        ])
-        .pipe(gulp.dest('vendor/font-awesome'))
+gulp.task('copy',function() {
+   gulp.src(['src/*.html',])
+     .pipe(gulp.dest('dist'))
+   
+   gulp.src('src/style/vendor/**/*')
+     .pipe(gulp.dest('dist/vendor'))
+
+   gulp.src('src/img/**/*')
+     .pipe(gulp.dest('dist/img'))
+
 })
 
 // Run everything
@@ -67,16 +80,17 @@ gulp.task('default', ['minify-css', 'minify-js', 'copy']);
 gulp.task('browserSync', function() {
     browserSync.init({
         server: {
-            baseDir: ''
+            baseDir: 'dist/'
         },
     })
 })
 
 // Dev task with browserSync
-gulp.task('dev', ['browserSync', 'minify-css', 'minify-js'], function() {
-    gulp.watch(['sass/*.scss'], ['minify-css']);
-    gulp.watch('js/*.js', ['minify-js']);
+gulp.task('dev', ['browserSync','copy', 'minify-css', 'minify-js'], function() {
+    //compile and minifies css and js
+    gulp.watch('src/style/*.scss', ['minify-css']);
+    gulp.watch('src/js/*.js', ['minify-js']);
     // Reloads the browser whenever HTML or JS files change
-    gulp.watch('*.html', browserSync.reload);
-    gulp.watch('js/**/*.js', browserSync.reload);
+    gulp.watch('dist/*.html', browserSync.reload);
+    gulp.watch('dist/js/**/*.js', browserSync.reload);
 });
