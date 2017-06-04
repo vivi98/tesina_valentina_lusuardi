@@ -88,7 +88,7 @@ gulp.task('browserSync', function() {
 // Dev task with browserSync
 gulp.task('dev', ['browserSync','copy', 'minify-css', 'minify-js'], function() {
     //compile and minifies css and js
-    gulp.watch(['src/*.html','src/img/*/','vendor/*/'],['copy']);
+    gulp.watch(['src/*.html','src/img/*','vendor/*/'],['copy']);
     gulp.watch('src/style/*.scss', ['minify-css']);
     gulp.watch('src/js/*.js', ['minify-js']);
     // Reloads the browser whenever HTML or JS files change
