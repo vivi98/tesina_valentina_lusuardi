@@ -278,7 +278,7 @@ a {
 
     #Bibliografia {
         height: 400px!important;
-        margin-top: 250px!important;
+        margin-top: 35%!important;
     }
 
 
@@ -357,7 +357,7 @@ body {
 }
 
 #Bibliografia h2 {
-    margin-top: 100px!important;
+    margin-top: 100pximportant;
 }
 
 #Bibliografia li {
@@ -419,4 +419,11 @@ body {
 
 #casa .poetry {
     font-style: italic!important;
+}
+
+.back-button {
+  position: absolute;
+  top:3%;
+  left: 2%;
+  z-index: 100000000;
 }
